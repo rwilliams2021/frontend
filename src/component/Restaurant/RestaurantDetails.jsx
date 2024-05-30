@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { Radio } from '@mui/material'; // Correct import for Radio
+import MenuCard from './MenuCard';
 
 const categories = [
     "pizza",
@@ -18,6 +19,8 @@ const foodTypes = [
     { label: "Non-vegetarian", value: "non_vegetarian" },
     { label: "Seasonal", value: "seasonal" }
 ];
+
+const menu=[1,1,1,1,1,1]
 
 const RestaurantDetails = () => {
     const [foodType, setFoodType] = useState("all");
@@ -113,8 +116,8 @@ const RestaurantDetails = () => {
                         </div>
                     </div>
                 </div>
-                <div className='space-y-5 lg:w-[80%] filter'>
-                    Menu
+                <div className='space-y-5 lg:w-[80%] filter lg:pl-10'>
+                    {menu.map((item) =><MenuCard/>)}
                 </div>
             </section>
         </div>
