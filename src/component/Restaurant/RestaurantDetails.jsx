@@ -1,9 +1,36 @@
-import { Grid } from '@mui/material'
-import React from 'react'
+import { Divider, FormControl, FormControlLabel, Grid, RadioGroup, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { Radio } from '@mui/material'; // Correct import for Radio
+
+const categories = [
+    "pizza",
+    "biryani",
+    "burger",
+    "chicken",
+    "rice"
+];
+
+const foodTypes = [
+    { label: "All", value: "all" },
+    { label: "Vegetarian only", value: "vegetarian" },
+    { label: "Non-vegetarian", value: "non_vegetarian" },
+    { label: "Seasonal", value: "seasonal" }
+];
 
 const RestaurantDetails = () => {
+    const [foodType, setFoodType] = useState("all");
+    const [foodCategory, setFoodCategory] = useState("");
+
+    const handleFoodTypeChange = (e) => {
+        setFoodType(e.target.value);
+    };
+
+    const handleFoodCategoryChange = (e) => {
+        setFoodCategory(e.target.value);
+    };
+
     return (
         <div>
             <section>
@@ -46,8 +73,52 @@ const RestaurantDetails = () => {
                     </div>
                 </div>
             </section>
+            <Divider />
+            <section className='pt-[2rem] lg:flex relative'>
+                <div className='space-y-10 lg:w-[20%] filter'>
+                    <div className='box space-y-5 lg:sticky top-28 d'>
+                        <div>
+                            <Typography variant='h5' sx={{ paddingBottom: "1rem" }}>
+                                Food Type
+                            </Typography>
+                            <FormControl className='py-10 space-y-5' component='fieldset'>
+                                <RadioGroup onChange={handleFoodTypeChange} name="food_type" value={foodType}>
+                                    {foodTypes.map((item) => (
+                                        <FormControlLabel
+                                            key={item.value}
+                                            value={item.value}
+                                            control={<Radio />} // Correct usage of Radio component
+                                            label={item.label}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
+                        <div>
+                            <Typography variant='h5' sx={{ paddingBottom: "1rem" }}>
+                                Food Category
+                            </Typography>
+                            <FormControl className='py-10 space-y-5' component='fieldset'>
+                                <RadioGroup onChange={handleFoodCategoryChange} name="food_category" value={foodCategory}>
+                                    {categories.map((item) => (
+                                        <FormControlLabel
+                                            key={item}
+                                            value={item}
+                                            control={<Radio />} // Correct usage of Radio component
+                                            label={item}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
+                    </div>
+                </div>
+                <div className='space-y-5 lg:w-[80%] filter'>
+                    Menu
+                </div>
+            </section>
         </div>
-    )
+    );
 }
 
-export default RestaurantDetails
+export default RestaurantDetails;
