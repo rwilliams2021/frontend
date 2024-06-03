@@ -12,7 +12,6 @@ import CustomerRoute from './Routers/CustomerRoute';
 import { useEffect } from 'react';
 import { getUser } from './component/State/Authentication/Action';
 import { useDispatch, useSelector } from 'react-redux';
-import { store } from './component/State/Authentication/store';
 
 function App() {
   const dispatch=useDispatch()
