@@ -1,17 +1,12 @@
 import { Divider, FormControl, FormControlLabel, Grid, RadioGroup, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { Radio } from '@mui/material'; // Correct import for Radio
 import MenuCard from './MenuCard';
-
-const categories = [
-    "pizza",
-    "biryani",
-    "burger",
-    "chicken",
-    "rice"
-];
+import { useNavigate, useParams } from 'react-router-dom';
+import { getRestaurantById, getRestaurantCategories } from '../State/Restaurant/Action';
+import { useDispatch, useSelector } from 'react-redux';
 
 const foodTypes = [
     { label: "All", value: "all" },
@@ -20,7 +15,9 @@ const foodTypes = [
     { label: "Seasonal", value: "seasonal" }
 ];
 
-const menu=[1,1,1,1,1,1]
+const menu = [1, 1, 1, 1, 1, 1]
+
+
 
 const RestaurantDetails = () => {
     const [foodType, setFoodType] = useState("all");
@@ -34,30 +31,41 @@ const RestaurantDetails = () => {
         setFoodCategory(e.target.value);
     };
 
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const jwt = localStorage.getItem("jwt")
+    const { restaurant } = useSelector(store => store)
+
+    const { id } = useParams()
+
+    console.log("Restaurant: ", restaurant)
+
+    useEffect(() => {
+        dispatch(getRestaurantById({ jwt, restaurantId: id }))
+        dispatch(getRestaurantCategories({ jwt, restaurantId: id }))
+    }, [])
+
     return (
         <div>
             <section>
                 <h3 className='text-gray-500 py-2 mt-10'>Home/india/indian fast food/3</h3>
                 <div>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} lg={6}>
-                            <img className='w-full h-[40vh] object-cover'
-                                src="https://cdn.pixabay.com/photo/2018/07/14/15/27/cafe-3537801_640.jpg"
-                                alt=""
-                            />
-                        </Grid>
-                        <Grid item xs={12} lg={6}>
-                            <img className='w-full h-[40vh] object-cover'
-                                src="https://cdn.pixabay.com/photo/2016/11/18/14/05/brick-wall-1834784_1280.jpg"
-                                alt=""
-                            />
-                        </Grid>
+                        {restaurant.restaurant?.images.map((src, index) => (
+                            <Grid item xs={12} lg={6} key={index}>
+                                <img
+                                    className='w-full h-[40vh] object-cover'
+                                    src={src}
+                                    alt={`Image ${index + 1}`}
+                                />
+                            </Grid>
+                        ))}
                     </Grid>
                 </div>
                 <div className='pt-3 pb-5'>
-                    <h1 className='text-4xl font-semibold'>Indian Fast Food</h1>
+                    <h1 className='text-4xl font-semibold'>{restaurant.restaurant?.name}</h1>
                     <p className='text-gray-500 mt-1'>
-                        Craving it all? Dive into our global flavors and experience the taste of India!
+                        {restaurant.restaurant?.description}
                     </p>
 
                     <div className='space-y-3 mt-3'>
@@ -103,21 +111,22 @@ const RestaurantDetails = () => {
                             </Typography>
                             <FormControl className='py-10 space-y-5' component='fieldset'>
                                 <RadioGroup onChange={handleFoodCategoryChange} name="food_category" value={foodCategory}>
-                                    {categories.map((item) => (
+                                    {restaurant.categories && restaurant.categories.map((item) => (
                                         <FormControlLabel
-                                            key={item}
-                                            value={item}
-                                            control={<Radio />} // Correct usage of Radio component
-                                            label={item}
+                                            key={item.id} // Assuming each category has a unique 'id'
+                                            value={item.name} // Assuming you want to use the category name as the value
+                                            control={<Radio />}
+                                            label={item.name}
                                         />
                                     ))}
                                 </RadioGroup>
                             </FormControl>
+
                         </div>
                     </div>
                 </div>
                 <div className='space-y-5 lg:w-[80%] filter lg:pl-10'>
-                    {menu.map((item) =><MenuCard/>)}
+                    {menu.map((item) => <MenuCard />)}
                 </div>
             </section>
         </div>

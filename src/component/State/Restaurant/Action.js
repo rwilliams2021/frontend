@@ -20,7 +20,7 @@ export const getAllRestaurants = () => async (dispatch) => {
 export const getRestaurantById = (reqData) => async (dispatch) => {
     dispatch({ type: GET_RESTAURANT_BY_ID_REQUEST })
     try {
-        const { data } = await api.get(`/admin/restaurant/${reqData.restaurantId}`, {
+        const { data } = await api.get(`/restaurant/${reqData.restaurantId}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
@@ -196,7 +196,7 @@ export const createCategory = ({ reqData, jwt }) => async (dispatch) => {
 export const getRestaurantCategories = ({ jwt, restaurantId }) => async (dispatch) => {
     dispatch({ type: GET_RESTAURANT_CATEGORIES_REQUEST})
     try {
-        const { data } = await api.get(`/admin/category/restaurant/${restaurantId}`, {
+        const { data } = await api.get(`/category/restaurant/${restaurantId}`, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
