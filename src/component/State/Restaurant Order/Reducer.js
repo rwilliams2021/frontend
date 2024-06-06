@@ -26,7 +26,7 @@ const restaurantOrderReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                orders: state.orders.map(order => order._id === action.payload._id ? action.payload : order)
+                orders: state.orders.map(order => order.id === action.payload.id ? action.payload : order)
             }
         case actionTypes.GET_RESTAURANT_ORDER_FAILURE:
         case actionTypes.UPDATE_ORDER_STATUS_FAILURE:

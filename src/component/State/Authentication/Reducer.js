@@ -27,13 +27,14 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 jwt: action.payload,
-                success: "Register Success"
+                success: "Login Success"
             }
         case GET_USER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 user: action.payload,
+                favourites: action.payload.favourites
             }
         case ADD_TO_FAVOURITE_SUCCESS:
             return {
@@ -41,7 +42,7 @@ export const authReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: null,
                 favourites: isPresentInFavourites(state.favourites, action.payload)
-                    ? state.favourites.filter(item => item._id !== action.payload._id)
+                    ? state.favourites.filter(item => item.id !== action.payload.id)
                     : [action.payload, ...state.favourites]
             }
         case LOGOUT:

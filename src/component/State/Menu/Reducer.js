@@ -37,14 +37,14 @@ export const menuItemReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                menuItems: state.menuItems.filter(item => item._id !== action.payload),
+                menuItems: state.menuItems.filter(item => item.id !== action.payload),
             }
         case actionTypes.UPDATE_MENU_ITEMS_AVAILABILITY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 menuItems: state.menuItems.map(
-                    (menuItem) => menuItem._id === action.payload.id ? action.payload : menuItem
+                    (menuItem) => menuItem.id === action.payload.id ? action.payload : menuItem
                 )
             }
         case actionTypes.SEARCH_MENU_ITEMS_SUCCESS:

@@ -30,7 +30,7 @@ export const ingredientReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                ingredients: state.ingredients.map(ingredient => ingredient._id === action.payload.id ? action.payload : ingredient)
+                ingredients: state.ingredients.map(ingredient => ingredient.id === action.payload.id ? action.payload : ingredient)
             }
         case actionTypes.GET_ALL_RESTAURANT_INGREDIENTS_SUCCESS:
             return{

@@ -1,9 +1,10 @@
 import * as actionTypes from "./ActionType"
+import { api } from "../../Config/api"
 
 export const findCart = (jwt) => async (dispatch) => {
     dispatch({ type: actionTypes.FIND_CART_REQUEST })
     try {
-        const { data } = await api.get(`${API_URL}/cart`, {
+        const { data } = await api.get(`/cart`, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
@@ -19,7 +20,7 @@ export const findCart = (jwt) => async (dispatch) => {
 export const clearCart = () => async (dispatch) => {
     dispatch({ type: actionTypes.CLEAR_CART_REQUEST })
     try {
-        const { data } = await api.put(`${API_URL}/cart/clear`, {}, {
+        const { data } = await api.put(`/cart/clear`, {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
@@ -36,7 +37,7 @@ export const clearCart = () => async (dispatch) => {
 export const getAllCartItems = (reqData) => async (dispatch) => {
     dispatch({ type: GET_ALL_CART_ITEMS_REQUEST })
     try {
-        const response = await api.get(`${API_URL}/cart/${reqData.cartId}/items`, {
+        const response = await api.get(`/cart/${reqData.cartId}/items`, {
             headers: {
                 Authorization: `Bearer ${reqData.token}`
             }
@@ -52,7 +53,7 @@ export const getAllCartItems = (reqData) => async (dispatch) => {
 export const addItemToCart = (reqData) => async (dispatch) => {
     dispatch({ type: actionTypes.ADD_ITEM_TO_CART_REQUEST })
     try {
-        const { data } = await api.put(`${API_URL}/cart/add`, reqData.cartItem, {
+        const { data } = await api.put(`/cart/add`, reqData.cartItem, {
             headers: {
                 Authorization: `Bearer ${reqData.token}`
             }
@@ -68,7 +69,7 @@ export const addItemToCart = (reqData) => async (dispatch) => {
 export const updateCartItem = (reqData) => async (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_CART_ITEM_REQUEST })
     try {
-        const { data } = await api.put(`${API_URL}/cart/cart-item/update`, reqData, {
+        const { data } = await api.put(`/cart/cart-item/update`, reqData, {
             headers: {
                 Authorization: `Bearer ${reqData.jwt}`
             }
@@ -84,7 +85,7 @@ export const updateCartItem = (reqData) => async (dispatch) => {
 export const removeCartItem = (cartItemId, jwt) => async (dispatch) => {
     dispatch({ type: actionTypes.REMOVE_ITEM_FROM_CART_REQUEST })
     try {
-        const { data } = await api.delete(`${API_URL}/cart/cart-item/${cartItemId}/remove`, {
+        const { data } = await api.delete(`/cart/cart-item/${cartItemId}/remove`, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }

@@ -58,8 +58,8 @@ export const restaurantReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: null,
-                restaurants: state.restaurants.filter(item => item._id !== action.payload),
-                userRestaurant: state.userRestaurant.filter(item => item._id !== action.payload)
+                restaurants: state.restaurants.filter(item => item.id !== action.payload),
+                userRestaurant: state.userRestaurant.filter(item => item.id !== action.payload)
             }
         case CREATE_EVENT_SUCCESS:
             return {
@@ -88,8 +88,8 @@ export const restaurantReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: null,
-                events: state.events.filter(item => item._id !== action.payload),
-                restaurantEvents: state.restaurantEvents.filter(item => item._id !== action.payload)
+                events: state.events.filter(item => item.id !== action.payload),
+                restaurantEvents: state.restaurantEvents.filter(item => item.id !== action.payload)
             }
         case CREATE_CATEGORY_SUCCESS:
             return {

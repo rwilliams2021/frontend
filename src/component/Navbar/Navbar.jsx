@@ -17,10 +17,12 @@ export const Navbar = () => {
     const { auth } = useSelector(store => store)
     const navigate = useNavigate();
     const handleAvatarClick = () => {
-        if(auth.user?.role === "CUSTOMER"){
+        if (auth.user?.role === "CUSTOMER") {
             navigate("/my-profile")
-        } else {
+        } else if (auth.user?.role === "RESTAURANT_OWNER") {
             navigate("/admin/restaurant")
+        } else {
+            throw new Error("Invalid user role")
         }
     }
     return (

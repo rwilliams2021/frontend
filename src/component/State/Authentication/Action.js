@@ -1,5 +1,4 @@
-import axios from "axios"
-import { API_URL, api } from "../../Config/api"
+import { api } from "../../Config/api"
 import { ADD_TO_FAVOURITE_REQUEST, ADD_TO_FAVOURITE_SUCCESS, GET_USER_REQUEST, 
     LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_REQUEST,REGISTER_SUCCESS,REGISTER_FAILURE, 
     GET_USER_FAILURE, GET_USER_SUCCESS, ADD_TO_FAVOURITE_FAILURE, LOGIN_FAILURE } from "./ActionType"
@@ -7,7 +6,7 @@ import { ADD_TO_FAVOURITE_REQUEST, ADD_TO_FAVOURITE_SUCCESS, GET_USER_REQUEST,
 export const registerUser = (reqData) => async (dispatch) => {
     dispatch({ type: REGISTER_REQUEST })
     try {
-        const { data } = await axios.post(`${API_URL}/auth/signup`, reqData.userData)
+        const { data } = await api.post(`/auth/signup`, reqData.userData)
         if (data.jwt) localStorage.setItem("jwt", data.jwt)
         if (data.role === "RESTURANT_OWNER") {
             reqData.navigate("/admin/restaurant")
@@ -25,7 +24,7 @@ export const registerUser = (reqData) => async (dispatch) => {
 export const loginUser = (reqData) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST })
     try {
-        const { data } = await axios.post(`${API_URL}/auth/signin`, reqData.userData)
+        const { data } = await api.post(`/auth/signin`, reqData.userData)
         if (data.jwt) localStorage.setItem("jwt", data.jwt)
         if (data.role === "RESTURANT_OWNER") {
             reqData.navigate("/admin/restaurant")
@@ -59,7 +58,7 @@ export const getUser = (jwt) => async (dispatch) => {
 export const addToFavourites = (jwt, restaurantId) => async (dispatch) => {
     dispatch({ type: ADD_TO_FAVOURITE_REQUEST })
     try {
-        const { data } = await api.put(`/api/restaurant/${restaurantId}/add-favourites`, {}, {
+        const { data } = await api.put(`/restaurant/${restaurantId}/add-favourites`, {}, {
             headers:{
                 Authorization: `Bearer ${jwt}`
             }

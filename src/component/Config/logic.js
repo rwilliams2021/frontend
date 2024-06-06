@@ -1,6 +1,6 @@
 export const isPresentInFavourites = (favourites, restaurant)=>{
     for(let item of favourites){
-        if(item._id === restaurant._id){
+        if(item.id === restaurant.id){
             return true
         }
         return false
