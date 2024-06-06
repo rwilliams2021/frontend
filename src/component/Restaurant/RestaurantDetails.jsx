@@ -7,6 +7,7 @@ import MenuCard from './MenuCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getRestaurantById, getRestaurantCategories } from '../State/Restaurant/Action';
 import { useDispatch, useSelector } from 'react-redux';
+import { getMenuItemsByRestaurantId } from '../State/Menu/Action';
 
 const foodTypes = [
     { label: "All", value: "all" },
@@ -14,10 +15,6 @@ const foodTypes = [
     { label: "Non-vegetarian", value: "non_vegetarian" },
     { label: "Seasonal", value: "seasonal" }
 ];
-
-const menu = [1, 1, 1, 1, 1, 1]
-
-
 
 const RestaurantDetails = () => {
     const [foodType, setFoodType] = useState("all");
@@ -34,7 +31,7 @@ const RestaurantDetails = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const jwt = localStorage.getItem("jwt")
-    const { restaurant } = useSelector(store => store)
+    const { restaurant, menu } = useSelector(store => store)
 
     const { id } = useParams()
 
@@ -43,6 +40,7 @@ const RestaurantDetails = () => {
     useEffect(() => {
         dispatch(getRestaurantById({ jwt, restaurantId: id }))
         dispatch(getRestaurantCategories({ jwt, restaurantId: id }))
+        dispatch(getMenuItemsByRestaurantId({ jwt, restaurantId: id, vegetarian: false, nonveg: false, seasonal: false, foodCategory: "" }))
     }, [])
 
     return (
@@ -126,7 +124,7 @@ const RestaurantDetails = () => {
                     </div>
                 </div>
                 <div className='space-y-5 lg:w-[80%] filter lg:pl-10'>
-                    {menu.map((item) => <MenuCard />)}
+                    {menu.menuItems.map((item) => <MenuCard item={item} />)}
                 </div>
             </section>
         </div>

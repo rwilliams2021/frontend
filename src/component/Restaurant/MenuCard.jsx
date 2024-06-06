@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -14,42 +14,52 @@ const ingredients = [
     category: "Protein",
     ingredients: ["Ground Beef", "Bacon"]
   }
-]
+];
 
-const MenuCard = () => {
+const MenuCard = ({ item }) => {
   const handleCheckBoxChange = (value) => {
-    console.log(value)
-  }
+    console.log(value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Add form submission logic here
+    console.log("Form submitted");
+  };
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel-header" aria-controls="panel-content">
         <div className='lg:flex items-center justify-between'>
           <div className='lg:flex items-center lg:gap-5'>
             <img className='w-[7rem] h-[7rem] object-cover'
-              src='https://cdn.pixabay.com/photo/2019/03/22/18/25/food-4073884_640.jpg' alt=''
+              src={item.images[0]}
+              alt={item.name}
             />
             <div className='space-y-1 lg:space-y-5 lg:max-w-2xl'>
-              <p className='font-semibold text-xl'>Curry</p>
-              <p>€8.99</p>
-              <p className='text-gray-400'>Nice food</p>
+              <p className='font-semibold text-xl'>{item.name}</p>
+              <p>€{item.price}</p>
+              <p className='text-gray-400'>{item.description}</p>
             </div>
           </div>
-
         </div>
       </AccordionSummary>
       <AccordionDetails>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className='flex gap-5 flex-wrap'>
             {
-              ingredients.map((item) => (
-                <div>
-                  <p>{item.category}</p>
+              ingredients.map((categoryItem, index) => (
+                <div key={index}>
+                  <p>{categoryItem.category}</p>
                   <FormGroup>
                     {
-                    item.ingredients.map((item) => (
-                      <FormControlLabel control={<Checkbox onChange={() =>handleCheckBoxChange(item)}
-                      />} label={item} />
-                    ))
+                      categoryItem.ingredients.map((ingredient, idx) => (
+                        <FormControlLabel 
+                          key={idx} 
+                          control={<Checkbox onChange={() => handleCheckBoxChange(ingredient)} />} 
+                          label={ingredient} 
+                        />
+                      ))
                     }
                   </FormGroup>
                 </div>
@@ -57,12 +67,14 @@ const MenuCard = () => {
             }
           </div>
           <div className='pt-5'>
-            <Button variant="contained" disabled={false} type="submit">{true?"Add to cart":"Out of Stock"}</Button>
+            <Button variant="contained" disabled={false} type="submit">
+              {true ? "Add to cart" : "Out of Stock"}
+            </Button>
           </div>
         </form>
       </AccordionDetails>
     </Accordion>
-  )
-}
+  );
+};
 
-export default MenuCard
+export default MenuCard;
