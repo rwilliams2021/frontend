@@ -12,7 +12,7 @@ import { getMenuItemsByRestaurantId } from '../State/Menu/Action';
 const foodTypes = [
     { label: "All", value: "all" },
     { label: "Vegetarian only", value: "vegetarian" },
-    { label: "Non-vegetarian", value: "non_vegetarian" },
+    { label: "Non-vegetarian", value: "non-vegetarian" },
     { label: "Seasonal", value: "seasonal" }
 ];
 
@@ -45,9 +45,13 @@ const RestaurantDetails = () => {
 
     useEffect(() => {
         dispatch(getMenuItemsByRestaurantId({
-            jwt, restaurantId: id, vegetarian: false, nonveg: false, seasonal: false, foodCategory: foodCategory
+            jwt, restaurantId: id, 
+            vegetarian: foodType==="vegetarian", 
+            nonveg: foodType==="non-vegetarian", 
+            seasonal: foodType==="seasonal", 
+            foodCategory: foodCategory
         }))
-    }, [foodCategory])
+    }, [foodType, foodCategory])
 
     return (
         <div>
