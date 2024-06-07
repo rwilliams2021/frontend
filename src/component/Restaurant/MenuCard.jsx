@@ -4,17 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-
-const ingredients = [
-  {
-    category: "Nuts and Seeds",
-    ingredients: ["Cashews"]
-  },
-  {
-    category: "Protein",
-    ingredients: ["Ground Beef", "Bacon"]
-  }
-];
+import { categoriseIngredients } from '../util/categoriseIngredients';
 
 const MenuCard = ({ item }) => {
   const handleCheckBoxChange = (value) => {
@@ -27,14 +17,17 @@ const MenuCard = ({ item }) => {
     console.log("Form submitted");
   };
 
+  const categorisedIngredients = categoriseIngredients(item.ingredients);
+
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel-header" aria-controls="panel-content">
         <div className='lg:flex items-center justify-between'>
           <div className='lg:flex items-center lg:gap-5'>
-            <img className='w-[7rem] h-[7rem] object-cover'
-              src={item.images[0]}
-              alt={item.name}
+            <img 
+              className='w-[7rem] h-[7rem] object-cover' 
+              src={item.images[0]} 
+              alt={item.name} 
             />
             <div className='space-y-1 lg:space-y-5 lg:max-w-2xl'>
               <p className='font-semibold text-xl'>{item.name}</p>
@@ -48,16 +41,16 @@ const MenuCard = ({ item }) => {
         <form onSubmit={handleSubmit}>
           <div className='flex gap-5 flex-wrap'>
             {
-              ingredients.map((categoryItem, index) => (
-                <div key={index}>
-                  <p>{categoryItem.category}</p>
+              Object.keys(categorisedIngredients).map((category) => (
+                <div key={category}>
+                  <p>{category}</p>
                   <FormGroup>
                     {
-                      categoryItem.ingredients.map((ingredient, idx) => (
+                      categorisedIngredients[category].map((ingredient, idx) => (
                         <FormControlLabel 
                           key={idx} 
-                          control={<Checkbox onChange={() => handleCheckBoxChange(ingredient)} />} 
-                          label={ingredient} 
+                          control={<Checkbox onChange={() => handleCheckBoxChange(ingredient.name)} />} 
+                          label={ingredient.name} 
                         />
                       ))
                     }
