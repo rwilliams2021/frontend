@@ -40,8 +40,14 @@ const RestaurantDetails = () => {
     useEffect(() => {
         dispatch(getRestaurantById({ jwt, restaurantId: id }))
         dispatch(getRestaurantCategories({ jwt, restaurantId: id }))
-        dispatch(getMenuItemsByRestaurantId({ jwt, restaurantId: id, vegetarian: false, nonveg: false, seasonal: false, foodCategory: "" }))
+
     }, [])
+
+    useEffect(() => {
+        dispatch(getMenuItemsByRestaurantId({
+            jwt, restaurantId: id, vegetarian: false, nonveg: false, seasonal: false, foodCategory: foodCategory
+        }))
+    }, [foodCategory])
 
     return (
         <div>
