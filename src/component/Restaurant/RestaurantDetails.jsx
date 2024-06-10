@@ -18,7 +18,7 @@ const foodTypes = [
 
 const RestaurantDetails = () => {
     const [foodType, setFoodType] = useState("all");
-    const [foodCategory, setFoodCategory] = useState("");
+    const [foodCategory, setFoodCategory] = useState("all");
 
     const handleFoodTypeChange = (e) => {
         setFoodType(e.target.value);
@@ -52,6 +52,12 @@ const RestaurantDetails = () => {
             foodCategory: foodCategory
         }))
     }, [foodType, foodCategory])
+
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    };
+    
+    const categories = restaurant.categories ? [{ id: 'all', name: 'All' }, ...restaurant.categories] : [{ id: 'all', name: 'All' }];
 
     return (
         <div>
@@ -119,12 +125,12 @@ const RestaurantDetails = () => {
                             </Typography>
                             <FormControl className='py-10 space-y-5' component='fieldset'>
                                 <RadioGroup onChange={handleFoodCategoryChange} name="food_category" value={foodCategory}>
-                                    {restaurant.categories && restaurant.categories.map((item) => (
+                                    {categories.map((item) => (
                                         <FormControlLabel
                                             key={item.id} // Assuming each category has a unique 'id'
-                                            value={item.name} // Assuming you want to use the category name as the value
+                                            value={item.name.toLowerCase()} // Assuming you want to use the category name as the value
                                             control={<Radio />}
-                                            label={item.name}
+                                            label={capitalizeFirstLetter(item.name)}
                                         />
                                     ))}
                                 </RadioGroup>
