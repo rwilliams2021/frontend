@@ -7,6 +7,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { findCart } from '../State/Cart/Action';
+import { createOrder } from '../State/Order/Action';
 
 export const style = {
     position: 'absolute',
@@ -36,7 +37,7 @@ const validationSchema = Yup.object().shape({
 
 const Cart = () => {
     const [open, setOpen] = useState(false);
-    const { cart } = useSelector(store => store);
+    const { auth, cart } = useSelector(store => store);
     const jwt = localStorage.getItem("jwt");
     const dispatch = useDispatch();
     const deliveryFee = 2;
@@ -44,13 +45,28 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(findCart(jwt));
-    }, [jwt,cart.cart.items.length]);
+    }, [jwt,cart.cart.items.length, dispatch]);
 
     const handleOpenAddressModal = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const handleSubmit = (values) => {
-        console.log("Form values", values);
+        const data = {
+            jwt: localStorage.getItem("jwt"),
+            order:{
+                restaurantId: cart.cartItems[0].food?.restaurant.id,
+                deliveryAddress:{
+                    fullname: auth.user?.fullname,
+                    streetAddress: values.streetAddress,
+                    city: values.city,
+                    state: values.state,
+                    pincode: values.pincode,
+                    country: "India"
+                }
+            }
+        }
+        dispatch(createOrder(data));
+        console.log("form data:", values);
     };
 
     const createOrderUsingSelectedAddress = () => {
@@ -70,7 +86,7 @@ const Cart = () => {
                         <div className='space-y-3'>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Item Total</p>
-                                <p>€{cart.cart.total}</p>
+                                <p>€{cart.cart?.total}</p>
                             </div>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Delivery Fee</p>

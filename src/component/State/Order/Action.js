@@ -1,4 +1,4 @@
-import api from "../../Config/api"
+import { api } from "../../Config/api"
 import * as actionTypes from "./ActionType"
 
 export const createOrder = (reqData) => async (dispatch) => {
@@ -6,7 +6,7 @@ export const createOrder = (reqData) => async (dispatch) => {
     try {
         const { data } = await api.post(`/order`, reqData.order, {
             headers: {
-                Authorization: `Bearer ${reqData.token}`
+                Authorization: `Bearer ${reqData.jwt}`
             }
         })
         // if(data.payment_url){
