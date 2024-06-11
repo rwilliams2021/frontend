@@ -13,7 +13,7 @@ const Orders = () => {
     if (auth.jwt) {
       dispatch(getUsersOrders(auth.jwt));
     } else {
-      navigate('/login'); // Redirect to login if not authenticated
+      navigate("/account/login"); // Redirect to login if not authenticated
     }
   }, [auth.jwt, dispatch, navigate]);
 
