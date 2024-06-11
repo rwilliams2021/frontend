@@ -4,6 +4,7 @@ import MultiItemCarousel from './MultiItemCarousel';
 import RestaurantCard from '../Restaurant/RestaurantCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllRestaurants } from '../State/Restaurant/Action';
+import { findCart } from '../State/Cart/Action';
 
 export const Home = () => {
     const dispatch = useDispatch();
@@ -12,7 +13,8 @@ export const Home = () => {
 
     useEffect(() => {
         dispatch(getAllRestaurants(jwt));
-    }, [dispatch, jwt]);
+        dispatch(findCart(jwt));
+    }, [jwt]);
 
     return (
         <div className='pb-10'>

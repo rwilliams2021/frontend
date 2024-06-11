@@ -35,17 +35,17 @@ export const clearCart = () => async (dispatch) => {
 
 //Unimplemented in backend
 export const getAllCartItems = (reqData) => async (dispatch) => {
-    dispatch({ type: GET_ALL_CART_ITEMS_REQUEST })
+    dispatch({ type: actionTypes.GET_ALL_CART_ITEMS_REQUEST })
     try {
         const response = await api.get(`/cart/${reqData.cartId}/items`, {
             headers: {
                 Authorization: `Bearer ${reqData.token}`
             }
         })
-        console.log("get all cart items:", data)
-        dispatch({ type: GET_ALL_CART_ITEMS_SUCCESS, payload: response.data })
+        console.log("get all cart items:", reqData)
+        dispatch({ type: actionTypes.GET_ALL_CART_ITEMS_SUCCESS, payload: response.data })
     } catch (error) {
-        dispatch({ type: GET_ALL_CART_ITEMS_FAILURE, payload: error })
+        dispatch({ type: actionTypes.GET_ALL_CART_ITEMS_FAILURE, payload: error })
         console.log(error)
     }
 }
@@ -69,7 +69,7 @@ export const addItemToCart = (reqData) => async (dispatch) => {
 export const updateCartItem = (reqData) => async (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_CART_ITEM_REQUEST })
     try {
-        const { data } = await api.put(`/cart/cart-item/update`, reqData, {
+        const { data } = await api.put(`/cart/cart-item/update`, reqData.data, {
             headers: {
                 Authorization: `Bearer ${reqData.jwt}`
             }
@@ -82,12 +82,12 @@ export const updateCartItem = (reqData) => async (dispatch) => {
     }
 }
 
-export const removeCartItem = (cartItemId, jwt) => async (dispatch) => {
+export const removeCartItem = (reqData) => async (dispatch) => {
     dispatch({ type: actionTypes.REMOVE_ITEM_FROM_CART_REQUEST })
     try {
-        const { data } = await api.delete(`/cart/cart-item/${cartItemId}/remove`, {
+        const { data } = await api.delete(`/cart/cart-item/${reqData.cartItemId}/remove`, {
             headers: {
-                Authorization: `Bearer ${jwt}`
+                Authorization: `Bearer ${reqData.jwt}`
             }
         })
         console.log("remove cart item:", data)

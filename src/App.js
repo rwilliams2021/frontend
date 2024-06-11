@@ -18,8 +18,10 @@ function App() {
   const jwt = localStorage.getItem("jwt")
   const {auth} = useSelector(store=>store)
   useEffect(() => {
-    dispatch(getUser(auth.jwt||jwt)) //use auth.jwt if present, else use jwt from local storage
-  }, [auth.jwt])
+    if (auth.jwt || jwt) {
+      dispatch(getUser(auth.jwt || jwt)); // use auth.jwt if present, else use jwt from local storage
+    }
+  }, [auth.jwt, dispatch, jwt]);
   return (
     <ThemeProvider theme = {darkTheme}>
       <CssBaseline />

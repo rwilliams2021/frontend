@@ -1,12 +1,13 @@
 import { Avatar, Badge, Box, IconButton } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React from "react";
+import React, { useDebugValue, useEffect } from "react";
 import { pink } from "@mui/material/colors";
 import './Navbar.css';
 import { useNavigate } from "react-router-dom";
 import { Person } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { findCart } from "../State/Cart/Action";
 
 /**
  * Renders a Navbar component with a heading "Navbar".
@@ -14,8 +15,15 @@ import { useSelector } from "react-redux";
  * @return {JSX.Element} The Navbar component.
  */
 export const Navbar = () => {
-    const { auth } = useSelector(store => store)
+    const { auth, cart } = useSelector(store => store)
+    const jwt = localStorage.getItem("jwt")
+    const dispatch = useDispatch()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(findCart(jwt))
+    }, [jwt])
+
     const handleAvatarClick = () => {
         if (auth.user?.role === "CUSTOMER") {
             navigate("/my-profile")
@@ -51,8 +59,8 @@ export const Navbar = () => {
                     }
                 </div>
                 <div>
-                    <IconButton style={{ cursor: "pointer" }}>
-                        <Badge color='primary' badgeContent={3}>
+                    <IconButton onClick={() => navigate("/cart")} style={{ cursor: "pointer" }}>
+                        <Badge color='primary' badgeContent={cart.cart?.items.length}>
                             <ShoppingCartIcon sx={{ fontSize: "1.5rem" }} />
                         </Badge>
                     </IconButton>
