@@ -26,7 +26,8 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                jwt: action.payload,
+                jwt: action.payload.jwt,
+                user: action.payload.user,
                 success: "Login Success"
             }
         case GET_USER_SUCCESS:
