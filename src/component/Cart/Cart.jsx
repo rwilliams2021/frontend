@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CartItem from './CartItem';
 import { Box, Button, Card, Divider, Grid, Modal, TextField } from '@mui/material';
 import AddressCard from './AddressCard';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { findCart } from '../State/Cart/Action';
+import { createOrder } from '../State/Order/Action';
 
 export const style = {
     position: 'absolute',
@@ -32,30 +35,50 @@ const validationSchema = Yup.object().shape({
     pincode: Yup.string().required('Pincode is required')
 });
 
-const items = [1, 1, 1, 1];
-
 const Cart = () => {
-    const createOrderUsingSelectedAddress = () => {
-        // Function logic here
-    };
+    const [open, setOpen] = useState(false);
+    const { auth, cart } = useSelector(store => store);
+    const jwt = localStorage.getItem("jwt");
+    const dispatch = useDispatch();
+    const deliveryFee = 2;
+    const gstRestCharges = 4; 
 
-    const handleOpenAddressModal = () => {
-        setOpen(true);
-    };
+    useEffect(() => {
+        dispatch(findCart(jwt));
+    }, [jwt,cart.cart.items.length, dispatch]);
 
-    const [open, setOpen] = React.useState(false);
+    const handleOpenAddressModal = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const handleSubmit = (values) => {
-        console.log("form values", values);
+        const data = {
+            jwt: localStorage.getItem("jwt"),
+            order:{
+                restaurantId: cart.cartItems[0].food?.restaurant.id,
+                deliveryAddress:{
+                    fullname: auth.user?.fullname,
+                    streetAddress: values.streetAddress,
+                    city: values.city,
+                    state: values.state,
+                    pincode: values.pincode,
+                    country: "India"
+                }
+            }
+        }
+        dispatch(createOrder(data));
+        console.log("form data:", values);
+    };
+
+    const createOrderUsingSelectedAddress = () => {
+        // Function logic here
     };
 
     return (
         <div className="container p-4">
             <main className="lg:flex justify-between">
                 <section className='lg:w-[30%] space-y-6 lg:min-h-screen pt-10'>
-                    {items.map((item, index) => (
-                        <CartItem key={index} />
+                    {cart.cartItems.map((item, index) => (
+                        <CartItem key={index} item={item} />
                     ))}
                     <Divider />
                     <div className='billDetails px-5 text-sm'>
@@ -63,21 +86,21 @@ const Cart = () => {
                         <div className='space-y-3'>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Item Total</p>
-                                <p>€50.00</p>
+                                <p>€{cart.cart?.total}</p>
                             </div>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Delivery Fee</p>
-                                <p>€5.00</p>
+                                <p>€{deliveryFee}</p>
                             </div>
                             <div className='flex justify-between text-gray-400'>
                                 <p>GST and Restaurant Charges</p>
-                                <p>€33.00</p>
+                                <p>€{gstRestCharges}</p>
                             </div>
                         </div>
                         <Divider className='my-3' />
                         <div className='flex justify-between text-gray-400 font-bold'>
                             <p>Total</p>
-                            <p>€88.00</p>
+                            <p>€{cart.cart.total + deliveryFee + gstRestCharges}</p>
                         </div>
                     </div>
                 </section>
@@ -94,14 +117,14 @@ const Cart = () => {
                                     showButton={true}
                                 />
                             ))}
-                            <Card className="flex gap-5 w-64 p-5 items-center">
+                            <Card className="flex flex-col gap-5 w-64 p-5 items-center">
                                 <AddLocationIcon />
                                 <div className='space-y-3 text-gray-500'>
                                     <h1 className='font-semibold text-lg'>Add New Address</h1>
+                                    <Button variant='contained' fullWidth onClick={handleOpenAddressModal}>
+                                        Add
+                                    </Button>
                                 </div>
-                                <Button variant='contained' fullWidth onClick={handleOpenAddressModal}>
-                                    Add
-                                </Button>
                             </Card>
                         </div>
                     </div>
@@ -114,9 +137,11 @@ const Cart = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Formik initialValues={initialValues}
+                    <Formik
+                        initialValues={initialValues}
                         validationSchema={validationSchema}
-                        onSubmit={handleSubmit}>
+                        onSubmit={handleSubmit}
+                    >
                         {() => (
                             <Form>
                                 <Grid container spacing={2}>
@@ -127,13 +152,10 @@ const Cart = () => {
                                             label="Street Address"
                                             fullWidth
                                             variant='outlined'
-                                            error={!!ErrorMessage('streetAddress')}
-                                            helperText={
-                                                <ErrorMessage name="streetAddress">
-                                                    {msg => <span>{msg}</span>}
-                                                </ErrorMessage>
-                                            }
                                         />
+                                        <ErrorMessage name="streetAddress">
+                                            {msg => <div style={{ color: 'red' }}>{msg}</div>}
+                                        </ErrorMessage>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Field
@@ -142,13 +164,10 @@ const Cart = () => {
                                             label="City"
                                             fullWidth
                                             variant='outlined'
-                                            error={!!ErrorMessage('city')}
-                                            helperText={
-                                                <ErrorMessage name="city">
-                                                    {msg => <span>{msg}</span>}
-                                                </ErrorMessage>
-                                            }
                                         />
+                                        <ErrorMessage name="city">
+                                            {msg => <div style={{ color: 'red' }}>{msg}</div>}
+                                        </ErrorMessage>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Field
@@ -157,13 +176,10 @@ const Cart = () => {
                                             label="State"
                                             fullWidth
                                             variant='outlined'
-                                            error={!!ErrorMessage('state')}
-                                            helperText={
-                                                <ErrorMessage name="state">
-                                                    {msg => <span>{msg}</span>}
-                                                </ErrorMessage>
-                                            }
                                         />
+                                        <ErrorMessage name="state">
+                                            {msg => <div style={{ color: 'red' }}>{msg}</div>}
+                                        </ErrorMessage>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Field
@@ -172,13 +188,10 @@ const Cart = () => {
                                             label="Pincode"
                                             fullWidth
                                             variant='outlined'
-                                            error={!!ErrorMessage('pincode')}
-                                            helperText={
-                                                <ErrorMessage name="pincode">
-                                                    {msg => <span>{msg}</span>}
-                                                </ErrorMessage>
-                                            }
                                         />
+                                        <ErrorMessage name="pincode">
+                                            {msg => <div style={{ color: 'red' }}>{msg}</div>}
+                                        </ErrorMessage>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button fullWidth variant='contained' type='submit' color='primary'>
@@ -193,6 +206,6 @@ const Cart = () => {
             </Modal>
         </div>
     );
-}
+};
 
 export default Cart;
