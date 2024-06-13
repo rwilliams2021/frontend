@@ -48,8 +48,10 @@ export const Navbar = () => {
                 </div>
                 <div>
                     {
-                        auth.user ? (
-                            <Avatar style={{ cursor: "pointer" }} onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{auth.user?.fullname[0].toUpperCase()}</Avatar>)
+                        auth.user ?
+                            (
+                                <Avatar style={{ cursor: "pointer" }} onClick={handleAvatarClick} sx={{ bgcolor: "white", color: pink.A400 }}>{auth.user?.fullname[0].toUpperCase()}</Avatar>
+                            )
                             :
                             (
                                 <IconButton onClick={() => navigate("/account/login")}>
