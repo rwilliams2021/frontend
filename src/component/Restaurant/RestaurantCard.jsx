@@ -4,7 +4,6 @@ import FavouriteIcon from '@mui/icons-material/Favorite';
 import FavouriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { isPresentInFavourites } from '../Config/logic';
 import { addToFavourites } from '../State/Authentication/Action';
 
 const RestaurantCard = ({ item }) => {
@@ -22,6 +21,16 @@ const RestaurantCard = ({ item }) => {
             navigate(`/restaurant/${item.address.city}/${item.name}/${item.id}`);
         }
     };
+
+    const isPresentInFavourites = () => {
+        for (let favourite of auth.favourites) {
+            if (favourite.id === item.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     return (
         <Card className='w-[18rem] h-[24rem] flex flex-col justify-between'>
@@ -49,7 +58,7 @@ const RestaurantCard = ({ item }) => {
                 </div>
                 <div className='self-end'>
                     <IconButton onClick={handleAddToFavourites}>
-                        {isPresentInFavourites(auth.favourites, item) ? <FavouriteIcon /> : <FavouriteBorderIcon />}
+                        {isPresentInFavourites() ? <FavouriteIcon /> : <FavouriteBorderIcon />}
                     </IconButton>
                 </div>
             </div>
