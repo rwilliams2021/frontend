@@ -15,6 +15,7 @@ export const registerUser = (reqData) => async (dispatch) => {
         }
         dispatch({ type: REGISTER_SUCCESS, payload: data.jwt })
         console.log("register success", data)
+        reqData.navigate("/account/login")
     } catch (error) {
         dispatch({ type: REGISTER_FAILURE, payload: error })
         console.log(error)
@@ -31,7 +32,7 @@ export const loginUser = (reqData) => async (dispatch) => {
         } else {
             reqData.navigate("/")
         }
-        dispatch({ type: LOGIN_SUCCESS, payload: data.jwt })
+        dispatch({ type: LOGIN_SUCCESS, payload: data })
         console.log("login success", data)
     } catch (error) {
         dispatch({ type: LOGIN_FAILURE, payload: error })

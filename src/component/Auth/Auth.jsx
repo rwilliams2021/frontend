@@ -12,7 +12,7 @@ const Auth = () => {
         navigate('/')
     }
     return (
-        <Modal onclose={handleOnClose} open={
+        <Modal onClose={handleOnClose} open={
             location.pathname === '/account/register'
             || location.pathname === '/account/login'
         }>

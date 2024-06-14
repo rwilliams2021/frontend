@@ -1,4 +1,3 @@
-import { isPresentInFavourites } from "../../Config/logic"
 import { ADD_TO_FAVOURITE_FAILURE, ADD_TO_FAVOURITE_REQUEST, ADD_TO_FAVOURITE_SUCCESS, GET_USER_FAILURE, GET_USER_REQUEST, GET_USER_SUCCESS, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS } from "./ActionType"
 
 const initialState = {
@@ -26,7 +25,8 @@ export const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                jwt: action.payload,
+                jwt: action.payload.jwt,
+                user: action.payload.user,
                 success: "Login Success"
             }
         case GET_USER_SUCCESS:
@@ -41,9 +41,7 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: null,
-                favourites: isPresentInFavourites(state.favourites, action.payload)
-                    ? state.favourites.filter(item => item.id !== action.payload.id)
-                    : [action.payload, ...state.favourites]
+                favourites: action.payload
             }
         case LOGOUT:
             return initialState

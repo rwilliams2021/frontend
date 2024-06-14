@@ -41,7 +41,7 @@ const RestaurantDetails = () => {
         dispatch(getRestaurantById({ jwt, restaurantId: id }))
         dispatch(getRestaurantCategories({ jwt, restaurantId: id }))
 
-    }, [])
+    }, [dispatch, id, jwt])
 
     useEffect(() => {
         dispatch(getMenuItemsByRestaurantId({
@@ -51,7 +51,7 @@ const RestaurantDetails = () => {
             seasonal: foodType==="seasonal", 
             foodCategory: foodCategory
         }))
-    }, [foodType, foodCategory])
+    }, [foodType, foodCategory, dispatch, id, jwt])
 
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
