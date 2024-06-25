@@ -45,7 +45,7 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(findCart(jwt));
-    }, [jwt,cart.cart.items.length, dispatch]);
+    }, [jwt, dispatch]);
 
     const handleOpenAddressModal = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -86,7 +86,7 @@ const Cart = () => {
                         <div className='space-y-3'>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Item Total</p>
-                                <p>€{cart.cart?.total}</p>
+                                <p>€{cart.cart?.total ?? 0}</p>
                             </div>
                             <div className='flex justify-between text-gray-400'>
                                 <p>Delivery Fee</p>
@@ -100,7 +100,7 @@ const Cart = () => {
                         <Divider className='my-3' />
                         <div className='flex justify-between text-gray-400 font-bold'>
                             <p>Total</p>
-                            <p>€{cart.cart.total + deliveryFee + gstRestCharges}</p>
+                            <p>€{(cart.cart?.total ?? 0) + deliveryFee + gstRestCharges}</p>
                         </div>
                     </div>
                 </section>
